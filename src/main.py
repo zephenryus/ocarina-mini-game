@@ -46,23 +46,23 @@ def main():
         button_d = Button(6)
 
         button_states = {
-            button_d2: False,
-            button_a: False,
-            button_b: False,
-            button_f: False,
-            button_d: False,
+            "button_d2": False,
+            "button_a": False,
+            "button_b": False,
+            "button_f": False,
+            "button_d": False,
         }
 
-        button_d2.when_pressed = lambda: on_press(button_states, button_d2, pygame.K_UP)
-        button_d2.when_released = lambda: on_release(button_states, button_d2, pygame.K_UP)
-        button_a.when_pressed = lambda: on_press(button_states, button_a, pygame.K_LEFT)
-        button_a.when_released = lambda: on_release(button_states, button_a, pygame.K_LEFT)
-        button_b.when_pressed = lambda: on_press(button_states, button_b, pygame.K_LEFT)
-        button_b.when_released = lambda: on_release(button_states, button_b, pygame.K_LEFT)
-        button_f.when_pressed = lambda: on_press(button_states, button_f, pygame.K_DOWN)
-        button_f.when_released = lambda: on_release(button_states, button_f, pygame.K_DOWN)
-        button_d.when_pressed = lambda: on_press(button_states, button_d, pygame.K_a)
-        button_d.when_released = lambda: on_release(button_states, button_d, pygame.K_a)
+        button_d2.when_pressed = lambda: on_press(button_states, "button_d2", pygame.K_UP)
+        button_d2.when_released = lambda: on_release(button_states, "button_d2", pygame.K_UP)
+        button_a.when_pressed = lambda: on_press(button_states, "button_a", pygame.K_LEFT)
+        button_a.when_released = lambda: on_release(button_states, "button_a", pygame.K_LEFT)
+        button_b.when_pressed = lambda: on_press(button_states, "button_b", pygame.K_LEFT)
+        button_b.when_released = lambda: on_release(button_states, "button_b", pygame.K_LEFT)
+        button_f.when_pressed = lambda: on_press(button_states, "button_f", pygame.K_DOWN)
+        button_f.when_released = lambda: on_release(button_states, "button_f", pygame.K_DOWN)
+        button_d.when_pressed = lambda: on_press(button_states, "button_d", pygame.K_a)
+        button_d.when_released = lambda: on_release(button_states, "button_d", pygame.K_a)
 
     note_d2 = Note(Notes.D2, "assets/audio/OOT_Notes_Ocarina_D2")
     note_a = Note(Notes.A, "assets/audio/OOT_Notes_Ocarina_A")
