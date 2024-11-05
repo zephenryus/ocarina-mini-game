@@ -39,11 +39,11 @@ def main():
     pygame.init()
 
     if is_raspberry_pi():
-        button_d2 = Button(17)
-        button_a = Button(5)
-        button_b = Button(27)
-        button_f = Button(22)
-        button_d = Button(6)
+        button_d2 = Button(17, bounce_time=0.05)
+        button_a = Button(5, bounce_time=0.05)
+        button_b = Button(27, bounce_time=0.05)
+        button_f = Button(22, bounce_time=0.05)
+        button_d = Button(6, bounce_time=0.05)
 
         button_states = {
             "button_d2": False,
