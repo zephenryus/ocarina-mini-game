@@ -1,3 +1,4 @@
+import platform
 import sys
 
 import pygame
@@ -9,25 +10,59 @@ from src.ocarina.sequence_manager import SequenceManager
 from src.ocarina.song import Song
 
 
+def is_raspberry_pi():
+    return platform.system() == "Linux" and (
+                "raspberrypi" in platform.uname().release or "rpi" in platform.uname().release)
+
+def post_keydown_event(key):
+    pygame_event = pygame.event.Event(pygame.KEYDOWN, {'key': key})
+    pygame.event.post(pygame_event)
+
+def post_keyup_event(key):
+    pygame_event = pygame.event.Event(pygame.KEYUP, {'key': key})
+    pygame.event.post(pygame_event)
+
+
+def on_press(button_states, button, key):
+    if not button_states[button]:  # Only post if the button wasn't already pressed
+        post_keydown_event(key)
+        button_states[button] = True  # Update state to pressed
+
+# Function to handle button release with state tracking
+def on_release(button_states, button, key):
+    if button_states[button]:  # Only post if the button was pressed
+        post_keyup_event(key)
+        button_states[button] = False  # Update state to released
+
+
 def main():
     pygame.init()
 
-    button_d2 = Button(6)
-    button_a = Button(22)
-    button_b = Button(5)
-    button_f = Button(17)
-    button_d = Button(27)
+    if is_raspberry_pi():
+        button_d2 = Button(17)
+        button_a = Button(5)
+        button_b = Button(27)
+        button_f = Button(22)
+        button_d = Button(6)
 
-    button_d2.when_pressed = lambda: keypress(pygame.K_UP)
-    button_d2.when_released = lambda: keyrelease(pygame.K_UP)
-    button_a.when_pressed = lambda: keypress(pygame.K_LEFT)
-    button_a.when_released = lambda: keyrelease(pygame.K_LEFT)
-    button_b.when_pressed = lambda: keypress(pygame.K_LEFT)
-    button_b.when_released = lambda: keyrelease(pygame.K_LEFT)
-    button_f.when_pressed = lambda: keypress(pygame.K_DOWN)
-    button_f.when_released = lambda: keyrelease(pygame.K_DOWN)
-    button_d.when_pressed = lambda: keypress(pygame.K_a)
-    button_d.when_released = lambda: keyrelease(pygame.K_a)
+        button_states = {
+            button_d2: False,
+            button_a: False,
+            button_b: False,
+            button_f: False,
+            button_d: False,
+        }
+
+        button_d2.when_pressed = lambda: on_press(button_states, button_d2, pygame.K_UP)
+        button_d2.when_released = lambda: on_release(button_states, button_d2, pygame.K_UP)
+        button_a.when_pressed = lambda: on_press(button_states, button_a, pygame.K_LEFT)
+        button_a.when_released = lambda: on_release(button_states, button_a, pygame.K_LEFT)
+        button_b.when_pressed = lambda: on_press(button_states, button_b, pygame.K_LEFT)
+        button_b.when_released = lambda: on_release(button_states, button_b, pygame.K_LEFT)
+        button_f.when_pressed = lambda: on_press(button_states, button_f, pygame.K_DOWN)
+        button_f.when_released = lambda: on_release(button_states, button_f, pygame.K_DOWN)
+        button_d.when_pressed = lambda: on_press(button_states, button_d, pygame.K_a)
+        button_d.when_released = lambda: on_release(button_states, button_d, pygame.K_a)
 
     note_d2 = Note(Notes.D2, "assets/audio/OOT_Notes_Ocarina_D2")
     note_a = Note(Notes.A, "assets/audio/OOT_Notes_Ocarina_A")
@@ -38,9 +73,14 @@ def main():
     songs = [
         Song(
             "Zelda's Lullaby",
-            [Notes.A, Notes.D2, Notes.B, Notes.A, Notes.D2, Notes.B],
+            [Notes.D, Notes.D, Notes.D],
             "assets/songs/Zeldas Lullaby.mp3"
-        )
+        ),
+        Song(
+            "Zelda's Lullaby2",
+            [Notes.F, Notes.F, Notes.F],
+            "assets/songs/Zeldas Lullaby.mp3"
+        ),
     ]
     sequence_manager = SequenceManager()
 
@@ -96,15 +136,6 @@ def main():
 
     pygame.quit()
     sys.exit()
-
-
-def keypress(key):
-    pygame_event = pygame.event.Event(pygame.KEYDOWN, {'key': key})
-    pygame.event.post(pygame_event)
-
-def keyrelease(key):
-    pygame_event = pygame.event.Event(pygame.KEYUP, {'key': key})
-    pygame.event.post(pygame_event)
 
 
 if __name__ == '__main__':
