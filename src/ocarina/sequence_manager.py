@@ -16,3 +16,7 @@ class SequenceManager:
         trimmed_sequence = current_sequence[:len(sequence)]
 
         return sequence == trimmed_sequence
+
+    def __str__(self):
+        return ",".join(note.name for note in list(self._current_sequence)[::-1])
+

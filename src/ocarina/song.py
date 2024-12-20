@@ -17,7 +17,7 @@ class Song:
     def __init__(self, name, sequence=None, audio_path=None):
         self.name = name
         self.sequence = sequence
-        pygame.mixer.music.load(audio_path)
+        self.path = audio_path
         self._state = SongStates.STOPPED
         self._thread = None
 
@@ -30,8 +30,12 @@ class Song:
         self._state = new_state
         self.change()
 
+    def load(self):
+        pygame.mixer.music.load(self.path)
+
     def play(self):
         if not self.playing():
+            self.load()
             self.state = SongStates.STARTING
             pygame.mixer.music.play()
             self.state = SongStates.PLAYING
